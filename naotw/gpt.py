@@ -189,7 +189,7 @@ def 設定環境():
         try:
             copy(s, t)
         except FileNotFoundError:
-            t.parent.mkdir()
+            t.parent.mkdir(exist_ok=True)
             copy(s, t)
 
 def 更新微軟辦公室軟體共用範本():
