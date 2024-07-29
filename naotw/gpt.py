@@ -2,11 +2,6 @@ from pathlib import Path
 import logging
 logger = logging.getLogger(Path(__file__).stem)
 
-微軟辦公室軟體共用範本路徑 = [
-        'AppData/Roaming/Microsoft/Templates/Normal.dotm' # Word
-       ,'AppData/Roaming/Microsoft/Excel/XLSTART/fhopecc.xlsb' # Excel
-       ]
-
 def 轉譯議會備詢提問(原始內容): 
     return f'''
 在台灣省宜蘭縣，審計部臺灣省宜蘭縣審計室會到宜蘭縣議會接受縣議員質詢，就過去查核宜蘭縣政府暨所屬機關單位的重要審計意見，整理成備詢資料，以下5則備詢資料的範例
@@ -135,7 +130,7 @@ def 轉譯資訊發布提問(原始內容):
 
 def 檔案內容轉譯資訊發布提問並複製剪貼簿(檔案):
     from clipboard import copy
-    from naotw.winman import TEMP, where
+    from zhongwen.winman import TEMP, where
     import os
     tmp = TEMP / 'gpt.tmp'
     pandoc = where('pandoc')[0]
@@ -148,14 +143,14 @@ def 檔案內容轉譯資訊發布提問並複製剪貼簿(檔案):
 
 def 剪貼簿內容轉譯資訊發布提問():
     from clipboard import paste, copy
-    from naotw.winman import TEMP, where
+    from zhongwen.winman import TEMP, where
     import os
     t = 轉譯資訊發布提問(paste())
     copy(t)
     
 def 檔案內容轉譯議會備詢提問並複製剪貼簿(檔案):
     from clipboard import copy
-    from naotw.winman import TEMP, where
+    from zhongwen.winman import TEMP, where
     import os
     tmp = TEMP / 'gpt.tmp'
     pandoc = where('pandoc')[0]
@@ -168,14 +163,15 @@ def 檔案內容轉譯議會備詢提問並複製剪貼簿(檔案):
  
 def 剪貼簿內容轉譯議會備詢提問():
     from clipboard import paste, copy
-    from naotw.winman import TEMP, where
+    from zhongwen.winman import TEMP, where
     import os
     t = 轉譯議會備詢提問(paste())
     copy(t)
     return t
  
 def 設定環境():
-    from naotw.winman import 增加所有檔案右鍵選單之功能
+    from zhongwen.winman import 增加所有檔案右鍵選單之功能
+    from zhongwen import office_document
     from shutil import copy
     import sys
     pythonexe = sys.executable
@@ -183,22 +179,7 @@ def 設定環境():
     增加所有檔案右鍵選單之功能('轉譯資訊發布提問', cmd)
     cmd = f'"{pythonexe}" -m naotw.gpt --file2inquery "%1"' 
     增加所有檔案右鍵選單之功能('轉譯議會備詢提問', cmd)
-    for t in 微軟辦公室軟體共用範本路徑:
-        t = Path.home() / t
-        s = Path(__file__).parent.parent / 'resource' / t.name
-        try:
-            copy(s, t)
-        except FileNotFoundError:
-            t.parent.mkdir(exist_ok=True)
-            copy(s, t)
-
-def 更新微軟辦公室軟體共用範本():
-    from shutil import copy
-    for s in 微軟辦公室軟體共用範本路徑:
-        s = Path.home() / s
-        t = Path(__file__).parent.parent / 'resource' / s.name
-        copy(s, t)
-    logger.info('更新微軟辦公室軟體共用範本完成！')
+    office_document.設定環境
 
 if __name__ == '__main__':
     import argparse
