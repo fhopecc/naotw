@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "naotw"
-version = "0.98"
+version = "0.99"
 authors = [
   { name="fhopecc", email="fhopecc@gmail.com" },
 ]
@@ -21,6 +21,5 @@ dependencies = ["zhongwen"]
 [project.urls]
 "Homepage" = "https://github.com/fhopecc/naotw"
 "Bug Tracker" = "https://github.com/fhopecc/naotw/issues"
-
 [tool.hatch.build.targets.wheel]
 packages = ["naotw"]

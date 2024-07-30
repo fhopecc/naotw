@@ -171,7 +171,7 @@ def 剪貼簿內容轉譯議會備詢提問():
  
 def 設定環境():
     from zhongwen.winman import 增加所有檔案右鍵選單之功能
-    from zhongwen import office_document
+    from zhongwen.office_document import 設定微軟辦公室軟體共用範本
     from shutil import copy
     import sys
     pythonexe = sys.executable
@@ -179,11 +179,11 @@ def 設定環境():
     增加所有檔案右鍵選單之功能('轉譯資訊發布提問', cmd)
     cmd = f'"{pythonexe}" -m naotw.gpt --file2inquery "%1"' 
     增加所有檔案右鍵選單之功能('轉譯議會備詢提問', cmd)
-    office_document.設定環境
+    設定微軟辦公室軟體共用範本()
 
 if __name__ == '__main__':
     import argparse
-    from pathlib import Path
+    logging.basicConfig(level=logging.INFO)
     parser = argparse.ArgumentParser()
     parser.add_argument("--file2news"
                        ,help="檔案內容轉譯資訊發布提問並複製剪貼簿"
@@ -211,8 +211,6 @@ if __name__ == '__main__':
         檔案內容轉譯資訊發布提問並複製剪貼簿(args.file2news)
     elif args.file2inquery:
         檔案內容轉譯議會備詢提問並複製剪貼簿(args.file2inquery)
-    elif args.update_office_temp:
-        更新微軟辦公室軟體共用範本()
     elif args.clipboard2news:
         剪貼簿內容轉譯資訊發布提問()
     elif args.clipboard2inquery:
