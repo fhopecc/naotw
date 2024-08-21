@@ -187,6 +187,8 @@ def 設定環境():
     增加檔案右鍵選單功能('議會備詢草擬', cmd, 'Word.Document.12') # .docx
     增加檔案右鍵選單功能('議會備詢草擬', cmd, '.pdf') # .pdf
     增加檔案右鍵選單功能('議會備詢草擬', cmd, '.txt') # .txt
+    cmd = f'"{pythonexe}" -m naotw.gis --file2kml "%1"' 
+    增加檔案右鍵選單功能('2kml', cmd, '.geojson') # .geojson
     設定微軟辦公室軟體共用範本()
 
 if __name__ == '__main__':

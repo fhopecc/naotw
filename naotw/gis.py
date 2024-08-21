@@ -1,5 +1,47 @@
 'GIS 工具模組'
 
+def tokml(geojson_or_shape):
+    '第一個欄位為資料夾(為目的分類)，第二個欄位為識別碼(如地號)，其餘欄位為說明'
+    from shapely.geometry.point import Point
+    from pathlib import Path
+    import geopandas as gpd
+    import simplekml
+    gdf = gpd.read_file(geojson_or_shape)
+    gdf = gdf.to_crs(epsg=4326) # kml crs is epsg 4326
+    kml = simplekml.Kml()
+    for f in gdf.iloc[:,0].drop_duplicates():
+        fol = kml.newfolder(name=f)
+        ls = gdf.query(f'{gdf.columns[0]}==@f')
+        for i, l in ls.iterrows():
+            圖徵說明 = '<br/>'.join(
+                f'<h>{c}</h>：{l[c]}' for c in l.index if c != 'geometry') 
+            landid = l.iloc[1]
+            geometry = l['geometry']
+            if isinstance(geometry, Point):
+                fol.newpoint(
+                     name=landid,
+                     coords=[(geometry.x, geometry.y)],
+                     description=圖徵說明
+                     )
+                continue
+            try:
+                #Polygon
+                coords = list(geometry.exterior.coords)
+            except:
+                #MultiPolygon
+                coords = [list(x.exterior.coords) for x in geometry.geoms]
+            finally:
+                圖徵說明 = '<br/>'.join(
+                    f'<h>{c}</h>：{l[c]}' for c in l.index if c != 'geometry')
+                fol.newpolygon(
+                     name=landid,
+                     outerboundaryis=coords, 
+                     innerboundaryis=[], 
+                     description=圖徵說明
+                     )
+    geojson_or_shape = Path(geojson_or_shape )
+    kml.save(geojson_or_shape.with_suffix('.kml'))
+
 def to_kml(gdf, k, name_column=None, folder_column=None, descs=None, folder_column2=None):
     from shapely.geometry.point import Point
     import simplekml
@@ -68,3 +110,14 @@ def to_kml(gdf, k, name_column=None, folder_column=None, descs=None, folder_colu
                          description=str(l[descs])
                          )
     kml.save(k)
+
+if __name__ == '__main__':
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--file2kml"
+                       ,help="地理圖資轉換成KML檔。"
+                       ,required=False
+                       )
+    args = parser.parse_args()
+    if args.file2kml:
+        tokml(args.file2kml)
