@@ -170,15 +170,25 @@ def 剪貼簿內容轉譯議會備詢提問():
     return t
  
 def 設定環境():
-    from zhongwen.winman import 增加所有檔案右鍵選單之功能
+    from zhongwen.winman import 增加檔案右鍵選單功能
     from zhongwen.office_document import 設定微軟辦公室軟體共用範本
     from shutil import copy
     import sys
     pythonexe = sys.executable
     cmd = f'"{pythonexe}" -m naotw.gpt --file2news "%1"' 
-    增加所有檔案右鍵選單之功能('轉譯資訊發布提問', cmd)
+    增加檔案右鍵選單功能('資訊發布草擬', cmd, '*')  # .doc
+    增加檔案右鍵選單功能('資訊發布草擬', cmd, 'Word.Document.8')  # .doc
+    增加檔案右鍵選單功能('資訊發布草擬', cmd, 'Word.Document.12') # .docx
+    增加檔案右鍵選單功能('資訊發布草擬', cmd, '.pdf') # .pdf
+    增加檔案右鍵選單功能('資訊發布草擬', cmd, '.txt') # .txt
     cmd = f'"{pythonexe}" -m naotw.gpt --file2inquery "%1"' 
-    增加所有檔案右鍵選單之功能('轉譯議會備詢提問', cmd)
+    增加檔案右鍵選單功能('議會備詢草擬', cmd, '*')  # .doc
+    增加檔案右鍵選單功能('議會備詢草擬', cmd, 'Word.Document.8')  # .doc
+    增加檔案右鍵選單功能('議會備詢草擬', cmd, 'Word.Document.12') # .docx
+    增加檔案右鍵選單功能('議會備詢草擬', cmd, '.pdf') # .pdf
+    增加檔案右鍵選單功能('議會備詢草擬', cmd, '.txt') # .txt
+    cmd = f'"{pythonexe}" -m naotw.gis --file2kml "%1"' 
+    增加檔案右鍵選單功能('2kml', cmd, '.geojson') # .geojson
     設定微軟辦公室軟體共用範本()
 
 if __name__ == '__main__':
@@ -201,7 +211,6 @@ if __name__ == '__main__':
                        ,help="剪貼簿內容轉譯議會備詢提問"
                        ,action='store_true'
                        )
-
     parser.add_argument("--update_office_temp"
                        ,help="更新微軟辦公室軟體共用範本"
                        ,action='store_true'
