@@ -1,5 +1,35 @@
 'GIS 工具模組'
 
+def 取路口(query=None):
+    import osmnx as ox
+    import geopandas as gpd
+
+    # 指定花蓮市的位置名稱
+    place_name = "Hualien City, Taiwan"
+
+    # 從 OpenStreetMap 下載花蓮市的道路網絡數據
+    G = ox.graph_from_place(place_name, network_type='drive')
+
+    # 提取路口 (交叉點) 的資料
+    nodes, edges = ox.graph_to_gdfs(G, nodes=True, edges=True)
+
+    # 篩選出具有多個連接道路的路口 (即交叉點)
+    intersections = nodes[nodes['street_count'] > 1]
+
+    def get_intersection_name(node, G):
+        "根據路口連接的道路名稱推測路口名稱"
+        street_names = set()
+        for u, v, key, data in G.edges(node, keys=True, data=True):
+            if 'name' in data:
+                street_names.add(str(data['name']))
+        return "".join(sorted(street_names))
+
+    # 對每個路口推測名稱
+    intersections['name'] = intersections.index.map(lambda node: get_intersection_name(node, G))
+    return intersections
+
+
+
 def tokml(geojson_or_shape):
     '第一個欄位為資料夾(為目的分類)，第二個欄位為識別碼(如地號)，其餘欄位為說明'
     from shapely.geometry.point import Point
