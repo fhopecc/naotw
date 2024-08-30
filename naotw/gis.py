@@ -1,6 +1,7 @@
 'GIS 工具模組'
 
-def 取路口(query=None):
+def 取路口(查詢地點=None):
+    '取開放街圖路口'
     import osmnx as ox
     import geopandas as gpd
 
@@ -27,8 +28,6 @@ def 取路口(query=None):
     # 對每個路口推測名稱
     intersections['name'] = intersections.index.map(lambda node: get_intersection_name(node, G))
     return intersections
-
-
 
 def tokml(geojson_or_shape):
     '第一個欄位為資料夾(為目的分類)，第二個欄位為識別碼(如地號)，其餘欄位為說明'
