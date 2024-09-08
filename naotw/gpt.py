@@ -169,32 +169,38 @@ def 剪貼簿內容轉譯議會備詢提問():
     copy(t)
     return t
  
-def 設定環境():
-    from zhongwen.winman import 增加檔案右鍵選單功能
+def 設定環境(全裝=False):
     from zhongwen.office_document import 設定微軟辦公室軟體共用範本
+    from zhongwen.winman import 增加檔案右鍵選單功能
     from shutil import copy
     import sys
     pythonexe = sys.executable
-    cmd = f'"{pythonexe}" -m naotw.gpt --file2news "%1"' 
-    增加檔案右鍵選單功能('資訊發布草擬', cmd, '*')  # .doc
-    增加檔案右鍵選單功能('資訊發布草擬', cmd, 'Word.Document.8')  # .doc
-    增加檔案右鍵選單功能('資訊發布草擬', cmd, 'Word.Document.12') # .docx
-    增加檔案右鍵選單功能('資訊發布草擬', cmd, '.pdf') # .pdf
-    增加檔案右鍵選單功能('資訊發布草擬', cmd, '.txt') # .txt
-    cmd = f'"{pythonexe}" -m naotw.gpt --file2inquery "%1"' 
-    增加檔案右鍵選單功能('議會備詢草擬', cmd, '*')  # .doc
-    增加檔案右鍵選單功能('議會備詢草擬', cmd, 'Word.Document.8')  # .doc
-    增加檔案右鍵選單功能('議會備詢草擬', cmd, 'Word.Document.12') # .docx
-    增加檔案右鍵選單功能('議會備詢草擬', cmd, '.pdf') # .pdf
-    增加檔案右鍵選單功能('議會備詢草擬', cmd, '.txt') # .txt
     cmd = f'"{pythonexe}" -m naotw.gis --file2kml "%1"' 
     增加檔案右鍵選單功能('2kml', cmd, '.geojson') # .geojson
-    設定微軟辦公室軟體共用範本()
+    if 全裝:
+        cmd = f'"{pythonexe}" -m naotw.gpt --file2news "%1"' 
+        增加檔案右鍵選單功能('資訊發布草擬', cmd, '*')  # .doc
+        增加檔案右鍵選單功能('資訊發布草擬', cmd, 'Word.Document.8')  # .doc
+        增加檔案右鍵選單功能('資訊發布草擬', cmd, 'Word.Document.12') # .docx
+        增加檔案右鍵選單功能('資訊發布草擬', cmd, '.pdf') # .pdf
+        增加檔案右鍵選單功能('資訊發布草擬', cmd, '.txt') # .txt
+        cmd = f'"{pythonexe}" -m naotw.gpt --file2inquery "%1"' 
+        增加檔案右鍵選單功能('議會備詢草擬', cmd, '*')  # .doc
+        增加檔案右鍵選單功能('議會備詢草擬', cmd, 'Word.Document.8')  # .doc
+        增加檔案右鍵選單功能('議會備詢草擬', cmd, 'Word.Document.12') # .docx
+        增加檔案右鍵選單功能('議會備詢草擬', cmd, '.pdf') # .pdf
+        增加檔案右鍵選單功能('議會備詢草擬', cmd, '.txt') # .txt
+        設定微軟辦公室軟體共用範本()
 
 if __name__ == '__main__':
     import argparse
     logging.basicConfig(level=logging.INFO)
     parser = argparse.ArgumentParser()
+    parser.add_argument("-a", "--installall"
+                       ,help="安裝全部功能"
+                       ,required=False
+                       ,action='store_true'
+                       )
     parser.add_argument("--file2news"
                        ,help="檔案內容轉譯資訊發布提問並複製剪貼簿"
                        ,required=False
@@ -211,10 +217,6 @@ if __name__ == '__main__':
                        ,help="剪貼簿內容轉譯議會備詢提問"
                        ,action='store_true'
                        )
-    parser.add_argument("--update_office_temp"
-                       ,help="更新微軟辦公室軟體共用範本"
-                       ,action='store_true'
-                       )
     args = parser.parse_args()
     if args.file2news:
         檔案內容轉譯資訊發布提問並複製剪貼簿(args.file2news)
@@ -224,5 +226,7 @@ if __name__ == '__main__':
         剪貼簿內容轉譯資訊發布提問()
     elif args.clipboard2inquery:
         剪貼簿內容轉譯議會備詢提問()
+    elif args.installall:
+        設定環境(全裝=True)
     else:
         設定環境()
