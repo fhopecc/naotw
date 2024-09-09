@@ -8,8 +8,9 @@ class Test(unittest.TestCase):
         import geopandas as gpd
         geojson = Path(__file__).parent / '農地光電.geojson'
         gdf = gpd.read_file(geojson)
-        tokml(geojson)
-        # show_html(gdf)
+        # tokml(geojson)
+        show_html(gdf)
+
     def test_plot(self):
         from zhongwen.pandas_tools import show_html
         from pathlib import Path
@@ -63,5 +64,5 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
     # unittest.main()
     suite = unittest.TestSuite()
-    suite.addTest(Test('test_plot'))  # 指定測試
+    suite.addTest(Test('test'))  # 指定測試
     unittest.TextTestRunner().run(suite)
